@@ -2,12 +2,13 @@ import pygame
 import random as rd
 from logger import log_event
 from circleshape import CircleShape
-from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS
+from constants import LINE_WIDTH, ASTEROID_MIN_RADIUS, ASTEROID_KILL_SOUND_PATH
 
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
+        self.kill_sound = pygame.mixer.Sound(ASTEROID_KILL_SOUND_PATH)
 
     def draw(self, screen):
         pygame.draw.circle(
@@ -19,6 +20,7 @@ class Asteroid(CircleShape):
 
     def split(self):
         self.kill()
+        self.kill_sound.play()
         if self.radius > ASTEROID_MIN_RADIUS:
             log_event('asteroid_split')
             angle = rd.uniform(20, 50)
